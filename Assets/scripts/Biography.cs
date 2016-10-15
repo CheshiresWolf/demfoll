@@ -138,7 +138,7 @@ public class Biography {
         { "Робоча",        new WorkerBiography()        }
     };
 
-    public void applyBiography(Person person, string biographyName) {
+    public void apply(Person person, string biographyName) {
         biographies[biographyName].apply(person);
         person.biography.Add(biographyName);
     }

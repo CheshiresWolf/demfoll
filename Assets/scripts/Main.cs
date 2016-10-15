@@ -8,15 +8,29 @@ public class Main : MonoBehaviour {
     PersonsGenerator gen;
 
     PersonPanelController personPanel;
+
     Button generateButton;
+    Button loadButton;
+    Button saveButton;
+    Button generateTeamsButton;
 
     Person[] persons;
 
     FileWorker fileWorker;
 
+    const int PERSONS_AMOUNT = 200;
+    const int TEAMS_AMOUNT = 15;
+
     // Use this for initialization
     void Start () {
         generateButton = GameObject.Find("GenerateButton").GetComponent<Button>();
+        loadButton = GameObject.Find("LoadButton").GetComponent<Button>();
+        saveButton = GameObject.Find("SaveButton").GetComponent<Button>();
+        generateTeamsButton = GameObject.Find("GenerateTeamsButton").GetComponent<Button>();
+
+        saveButton.gameObject.SetActive(false);
+        generateTeamsButton.gameObject.SetActive(false);
+
         personPanel = (PersonPanelController)GameObject.Find("PersonPanel").GetComponent("PersonPanelController");
 
         gen = new PersonsGenerator();
@@ -29,25 +43,42 @@ public class Main : MonoBehaviour {
         
     }
 
+    private void setInteractable(bool state) {
+    	generateButton.interactable = state;
+	    loadButton.interactable = state;
+	    saveButton.interactable = state;
+	    generateTeamsButton.interactable = state;
+    }
+
+    // generate/load buttons active by default,
+    // other two depends on them and must be activated later
+    bool levelTwoActivate = false;
+    private void activateButtons() {
+        if (levelTwoActivate) return;
+
+        saveButton.gameObject.SetActive(true);
+        generateTeamsButton.gameObject.SetActive(true);
+    }
+
     public void startGeneration() {
-        generateButton.interactable = false;
+        setInteractable(false);
 
         System.Diagnostics.Stopwatch sw = System.Diagnostics.Stopwatch.StartNew();
 
-        Debug.Log(Screen.width);
-        Debug.Log(Screen.height);
-
-        persons = gen.run(200);
+        persons = gen.run(PERSONS_AMOUNT);
         personPanel.drawPersons(persons);
 
-        Debug.Log(sw.ElapsedMilliseconds + " ms");
+        Debug.Log("Persons generation time : " + sw.ElapsedMilliseconds + " ms");
         sw.Stop();
 
-        generateButton.interactable = true;
+        activateButtons();
+        setInteractable(true);
     }
 
     public void savePersons() {
-        // Debug.Log(persons[0].convertToJson());
+        setInteractable(false);
+
+        System.Diagnostics.Stopwatch sw = System.Diagnostics.Stopwatch.StartNew();
 
         string res = "[";
         for (int i = 0; i < persons.Length; i++) {
@@ -60,11 +91,19 @@ public class Main : MonoBehaviour {
         }
         res += "]";
 
-        Debug.Log(res);
         fileWorker.writeFile("tempFile.txt", res);
+
+        Debug.Log("Persons save time : " + sw.ElapsedMilliseconds + " ms");
+        sw.Stop();
+
+        setInteractable(true);
     }
 
     public void loadPersons() {
+        setInteractable(false);
+
+        System.Diagnostics.Stopwatch sw = System.Diagnostics.Stopwatch.StartNew();
+
         string res = fileWorker.readFile("tempFile.txt");
 
         res = res.Substring(1, res.Length - 2);
@@ -81,6 +120,21 @@ public class Main : MonoBehaviour {
 
         personPanel.drawPersons(persons);
 
-        Debug.Log(res);
+        Debug.Log("Persons load time : " + sw.ElapsedMilliseconds + " ms");
+        sw.Stop();
+
+        activateButtons();
+        setInteractable(true);
+    }
+
+    public void generateTeams() {
+        setInteractable(false);
+
+        System.Diagnostics.Stopwatch sw = System.Diagnostics.Stopwatch.StartNew();
+
+        Debug.Log("Teams generation time : " + sw.ElapsedMilliseconds + " ms");
+        sw.Stop();
+
+        setInteractable(true);
     }
 }

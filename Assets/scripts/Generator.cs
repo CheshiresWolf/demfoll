@@ -1,5 +1,7 @@
-﻿namespace Generator {
-    class Collection {
+﻿using Utils;
+
+namespace Generator {
+    public class Collection {
         public string[] names;
         public int[] probs;
 
@@ -10,12 +12,15 @@
     }
 
     public class PersonsGenerator {
-        const string GENDER_MAN   = "муж";
+        const string GENDER_MAN = "муж";
         const string GENDER_WOMAN = "жен";
+
+        RandomUtils utils = new RandomUtils();
+        Biography biography = new Biography();
+        Perks perks = new Perks();
 
         public Person[] run(int number) {
             Person[] persons = new Person[number];
-            Biography biography = new Biography();
 
             Collection manBiography = readBiographyCollection(GENDER_MAN);
             Collection womanBiography = readBiographyCollection(GENDER_WOMAN);
@@ -25,25 +30,25 @@
 
                 persons[i].id = i;
 
-                persons[i].nation = getRandomFromCollection(readNationsCollection());
-                persons[i].gender = getRandomFromArrays(
+                persons[i].nation = utils.getRandomFromCollection(readNationsCollection());
+                persons[i].gender = utils.getRandomFromArrays(
                     new string[2] { GENDER_MAN, GENDER_WOMAN },
                     new int[2] { 90, 10 }
                 );
 
-                persons[i].name = getRandomFromCollection(
+                persons[i].name = utils.getRandomFromCollection(
                     readNamesCollection(persons[i].gender, persons[i].nation)
                 );
-                persons[i].surname = getRandomFromCollection(
+                persons[i].surname = utils.getRandomFromCollection(
                     readSurnamesCollection(persons[i].nation)
                 );
 
-                persons[i].age = getRandomBetween(20, 31);
+                persons[i].age = utils.getRandomBetween(20, 31);
 
-                biography.applyBiography(persons[i], getRandomFromCollection(persons[i].gender == GENDER_MAN ? manBiography : womanBiography));
-                biography.applyBiography(persons[i], getRandomFromCollection(persons[i].gender == GENDER_MAN ? manBiography : womanBiography));
+                biography.apply(persons[i], utils.getRandomFromCollection(persons[i].gender == GENDER_MAN ? manBiography : womanBiography));
+                biography.apply(persons[i], utils.getRandomFromCollection(persons[i].gender == GENDER_MAN ? manBiography : womanBiography));
 
-                persons[i].nature = getRandomFromArrays(
+                persons[i].nature = utils.getRandomFromArrays(
                     new string[3] { "Good", "Neutral", "Bad" },
                     new int[3] { 25, 50, 25 }
                 );
@@ -51,7 +56,7 @@
                 checkAbilities(persons[i]);
                 checkAge(persons[i]);
 
-                persons[i].money = getRandomBetween(0, 31);
+                persons[i].money = utils.getRandomBetween(0, 31);
             }
 
             return persons;
@@ -72,7 +77,7 @@
             switch (nation) {
                 case "Споглед":
                     if (gender == GENDER_MAN) {
-                        names = new string[90] { "Ctibor", "Nicolae", "Dimitrie", "Valentin", "Remus", "Petar", "Blažej", "Gaweł", "Albin", "Jacek", "Tomek", "Dragomir", "Bartosz", "Constantin", "Răzvan", "Bronisław", "Henryk", "Artur", "Filip", "Gracjan", "Mścisław", "Kazimierz", "Władysław", "Oleg", "Corneliu", "Věnceslav", "Franciszek", "Teobald", "Jan", "Andrzej", "Mateusz", "Bartłomiej", "Justyn", "Mirosław", "Szymon", "Arnold", "Bolesław", "Velkan", "Adam", "Witołd", "Janusz", "Stanisław", "Damian", "Lew", "Ernest", "Sebastian", "Dariusz", "Józef", "Krzysztof", "Grzegorz", "Marek", "Wolodymyr", "Roman", "Emil", "Codrin", "Igor", "Czesław", "Karlo", "Michał", "Łukasz", "Dawid", "Waldemar", "Marián", "Luděk", "Bartek", "Maxmilián", "Gustaw", "Miłosz", "Zikmund", "Aron", "Jarosław", "Eugen", "Antoni", "Augustyn", "Kasper", "Tadeusz", "Zdzisław", "Jaromir", "Iosif", "Serafin", "Leopold", "Aleksy", "Eduard", "Bogumił", "Costel", "Cristian", "Paul", "Walerian", "Darek", "Wacław"};
+                        names = new string[90] { "Ctibor", "Nicolae", "Dimitrie", "Valentin", "Remus", "Petar", "Blažej", "Gaweł", "Albin", "Jacek", "Tomek", "Dragomir", "Bartosz", "Constantin", "Răzvan", "Bronisław", "Henryk", "Artur", "Filip", "Gracjan", "Mścisław", "Kazimierz", "Władysław", "Oleg", "Corneliu", "Věnceslav", "Franciszek", "Teobald", "Jan", "Andrzej", "Mateusz", "Bartłomiej", "Justyn", "Mirosław", "Szymon", "Arnold", "Bolesław", "Velkan", "Adam", "Witołd", "Janusz", "Stanisław", "Damian", "Lew", "Ernest", "Sebastian", "Dariusz", "Józef", "Krzysztof", "Grzegorz", "Marek", "Wolodymyr", "Roman", "Emil", "Codrin", "Igor", "Czesław", "Karlo", "Michał", "Łukasz", "Dawid", "Waldemar", "Marián", "Luděk", "Bartek", "Maxmilián", "Gustaw", "Miłosz", "Zikmund", "Aron", "Jarosław", "Eugen", "Antoni", "Augustyn", "Kasper", "Tadeusz", "Zdzisław", "Jaromir", "Iosif", "Serafin", "Leopold", "Aleksy", "Eduard", "Bogumił", "Costel", "Cristian", "Paul", "Walerian", "Darek", "Wacław" };
                     } else {
                         names = new string[90] { "Anastasia", "Irma", "Sorina", "Milena", "Ruta", "Janina", "Tereza", "Daniela", "Brygida", "Běla", "Karolina", "Wiesława", "Lucia", "Kathryn", "Urszula", "Ramona", "Roxana", "Ileana", "Irena", "Daria", "Flavia", "Crina", "Cătălina", "Magda", "Salomea", "Adela", "Berta", "Viorica", "Ewelina", "Alicja", "Nikoleta", "Janita", "Maria", "Simona", "Benedykta", "Zora", "Marika", "Melánie", "Valentina", "Anna", "Zlata", "Klara", "Berenika", "Miloslava", "Jana", "Aneta", "Vasilica", "Iva", "Marianna", "Olga", "Gloria", "Czesława", "Miriam", "Domiana", "Vera", "Eunika", "Blanka", "Valeria", "Iwona", "Stanisława", "Roksana", "Czesława", "Edita", "Mirela", "Agnieszka", "Justyna", "Matylda", "Jaroslava", "Marta", "Cristina", "Jowita", "Estera", "Pelagia", "Valentina", "Ada", "Constanta", "Julie", "Jadwiga", "Augustyna", "Lavinia", "Eleonora", "Olivia", "Nora", "Drahomíra", "Denisa", "Vlasta", "Vasilica", "Sofia", "Ștefania", "Ewelina" };
                     }
@@ -109,116 +114,76 @@
         }
 
         private Collection readBiographyCollection(string gender) {
-        	if (gender == GENDER_MAN) {
-				// Солдат +5 RNGC, +3 ATHL & MLC  (15)
-				// Жебрак +5 STLTH+INVST (5)  (Л) (Фонд -15)
-				// Моряк +5 ATHL & HLTH (++) (15)
-				// Колоніст +5 CRFT&WLP (10)
-				// Студент +5 INT, +3 INVST & CHAR (5)
-				// Аферист +5 CHAR, +3 INT & CONSP (10) (Л)
-				// Злочинець +3 MLC & RNGC & STLTH & ATHL (15) (Л)
-				// Робочий +5 CRAFT & ATHL (10)
-				// Міщанин +5 INT & CMRC (10)
-				// Свідок Тінь +5 INVST & CONSP (5)
-				// Свідок Окульт +5 MYST & WLP (5)
-				// Аристократ +5 CHAR&WLP (5)
-				// Богема + 5 INT & CHAR (10)
-				// Лікар +5 INT + Перк Лікаря (1)
+            if (gender == GENDER_MAN) {
+                // Солдат +5 RNGC, +3 ATHL & MLC  (15)
+                // Жебрак +5 STLTH+INVST (5)  (Л) (Фонд -15)
+                // Моряк +5 ATHL & HLTH (++) (15)
+                // Колоніст +5 CRFT&WLP (10)
+                // Студент +5 INT, +3 INVST & CHAR (5)
+                // Аферист +5 CHAR, +3 INT & CONSP (10) (Л)
+                // Злочинець +3 MLC & RNGC & STLTH & ATHL (15) (Л)
+                // Робочий +5 CRAFT & ATHL (10)
+                // Міщанин +5 INT & CMRC (10)
+                // Свідок Тінь +5 INVST & CONSP (5)
+                // Свідок Окульт +5 MYST & WLP (5)
+                // Аристократ +5 CHAR&WLP (5)
+                // Богема + 5 INT & CHAR (10)
+                // Лікар +5 INT + Перк Лікаря (1)
 
-				return new Collection(
-	                new string[14] { "Солдат", "Жебрак", "Моряк", "Колоніст", "Студент", "Аферист", "Злочинець", "Робочий", "Міщанин", "Свідок Тінь", "Свідок Окульт", "Аристократ", "Богема", "Лікар" },
-	                new int[14] { 15, 5, 15, 10, 5, 10, 15, 10, 10, 5, 5, 5, 10, 1 }
-	            );
-			} else {
-				// Аферист + 5 CHAR, +3 INT & CONSP (15) (Л)
-				// Колоніст +5 CRFT&WLP (10)
-				// Жебрак +5 STLTH+INVST (5) (Л) (Фонд -15)
-				// Студент +5 INT, +3 INVST & CHAR (5)
-				// Злочинець +3 MLC & RNGC & STLTH & ATHL (15) (Л)
-				// Куртизанка +5 CHAR&CONSP (15) 
-				// Міщанка +5 INT & CMRC (10)
-				// Свідок Тінь +5 INVST & CONSP (5)
-				// Свідок Окульт +5 MYST & WLP (5)
-				// Аристократ +5 CHAR & WLP (5) 
-				// Робоча +5 CRAFT & ATHL (10)
-				// Богема + 5 INT & CHAR (10)
-				// Лікар +5 INT + Перк Лікаря (1)
-
-				return new Collection(
-	                new string[13] { "Аферист", "Колоніст", "Жебрак", "Студент", "Злочинець", "Куртизанка", "Міщанка", "Свідок Тінь", "Свідок Окульт", "Аристократ", "Робоча", "Богема", "Лікар" },
-	                new int[13] { 15, 10, 5, 5, 15, 15, 10, 5, 5, 5, 10, 10, 1 }
-	            );
-			}
-        }
-
-        // ======= <Utils> =======
-
-        private string getRandomFromCollection(Collection coll) {
-            if (coll.probs.Length > 0) {
-                return getRandomFromArrays(coll.names, coll.probs);
+                return new Collection(
+                    new string[14] { "Солдат", "Жебрак", "Моряк", "Колоніст", "Студент", "Аферист", "Злочинець", "Робочий", "Міщанин", "Свідок Тінь", "Свідок Окульт", "Аристократ", "Богема", "Лікар" },
+                    new int[14] { 15, 5, 15, 10, 5, 10, 15, 10, 10, 5, 5, 5, 10, 1 }
+                );
             } else {
-                return getRandomFromArray(coll.names);
+                // Аферист + 5 CHAR, +3 INT & CONSP (15) (Л)
+                // Колоніст +5 CRFT&WLP (10)
+                // Жебрак +5 STLTH+INVST (5) (Л) (Фонд -15)
+                // Студент +5 INT, +3 INVST & CHAR (5)
+                // Злочинець +3 MLC & RNGC & STLTH & ATHL (15) (Л)
+                // Куртизанка +5 CHAR&CONSP (15) 
+                // Міщанка +5 INT & CMRC (10)
+                // Свідок Тінь +5 INVST & CONSP (5)
+                // Свідок Окульт +5 MYST & WLP (5)
+                // Аристократ +5 CHAR & WLP (5) 
+                // Робоча +5 CRAFT & ATHL (10)
+                // Богема + 5 INT & CHAR (10)
+                // Лікар +5 INT + Перк Лікаря (1)
+
+                return new Collection(
+                    new string[13] { "Аферист", "Колоніст", "Жебрак", "Студент", "Злочинець", "Куртизанка", "Міщанка", "Свідок Тінь", "Свідок Окульт", "Аристократ", "Робоча", "Богема", "Лікар" },
+                    new int[13] { 15, 10, 5, 5, 15, 15, 10, 5, 5, 5, 10, 10, 1 }
+                );
             }
-        }
-
-        private string getRandomFromArrays(string[] names, int[] probabilities) {
-            int probSum = 0;
-
-            for (int i = 0; i < probabilities.Length; i++) {
-                probSum += probabilities[i];
-            }
-
-            double normalizationFactor = probSum / 100;
-
-            double probabilityValue = getRandomBetween(0, 100) * normalizationFactor;
-
-            for (int i = probabilities.Length - 1; i >= 0; i--) {
-                if (probSum > probabilityValue && probabilityValue > (probSum - probabilities[i])) {
-                    return names[i];
-                } else {
-                    probSum -= probabilities[i];
-                }
-            }
-
-            return names[0]; // return something if nothing helps
-        }
-
-        private string getRandomFromArray(string[] names) {
-            return names[getRandomBetween(0, names.Length)];
-        }
-
-        private int getRandomBetween(int min, int max) {
-            return UnityEngine.Random.Range(min, max); // strange Unity method, need to check its normal distribution
         }
 
         // ======= <Modifiers> =======
 
         private void checkAbilities(Person person) {
             // Здібності(5 %) - “Геній” +10 або “Невдаха” -10 стати
-            string abilitiesModifier = getRandomFromArrays(
+            string abilitiesModifier = utils.getRandomFromArrays(
                 new string[3] { "Геній", "None", "Невдаха" },
                 new int[3] { 5, 90, 5 }
             );
 
-            if (abilitiesModifier != "None") person.perks.Add(abilitiesModifier);
+            if (abilitiesModifier != "None") perks.apply(person, abilitiesModifier);
         }
 
         private void checkAge(Person person) {
             // Вік(5 %) - “Юність” 15 років або “Старість” +25 років
-            string ageModifier = getRandomFromArrays(
+            string ageModifier = utils.getRandomFromArrays(
                 new string[3] { "Юність", "None", "Старість" },
                 new int[3] { 5, 90, 5 }
             );
 
-            if (ageModifier != "None") {
-                if (ageModifier == "Юність") {
-                    person.age = 15;
-                } else {
-                    person.age += 25;
-                }
+            if (ageModifier != "None") perks.apply(person, ageModifier);
+        }
+    }
 
-                person.perks.Add(ageModifier);
-            }
+    public class TeamGenerator {
+        public Team[] run(int number) {
+            Team[] teams = new Team[number];
+
+            return teams;
         }
     }
 }
