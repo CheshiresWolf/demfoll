@@ -5,9 +5,11 @@ using System.Collections.Generic;
 using Utils;
 
 public class Main : MonoBehaviour {
-    PersonsGenerator gen;
+    PersonsGenerator personGenerator;
+    TeamGenerator teamGenerator;
 
     PersonPanelController personPanel;
+    TeamPanelController teamPanel;
 
     Button generateButton;
     Button loadButton;
@@ -15,6 +17,7 @@ public class Main : MonoBehaviour {
     Button generateTeamsButton;
 
     Person[] persons;
+    Team[] teams;
 
     FileWorker fileWorker;
 
@@ -30,10 +33,12 @@ public class Main : MonoBehaviour {
 
         saveButton.gameObject.SetActive(false);
         generateTeamsButton.gameObject.SetActive(false);
-
+        
         personPanel = (PersonPanelController)GameObject.Find("PersonPanel").GetComponent("PersonPanelController");
+        teamPanel = (TeamPanelController)GameObject.Find("TeamPanel").GetComponent("TeamPanelController");
 
-        gen = new PersonsGenerator();
+        personGenerator = new PersonsGenerator();
+        teamGenerator = new TeamGenerator();
 
         fileWorker = new FileWorker();
     }
@@ -48,6 +53,16 @@ public class Main : MonoBehaviour {
 	    loadButton.interactable = state;
 	    saveButton.interactable = state;
 	    generateTeamsButton.interactable = state;
+    }
+
+    private void showPersonsTab() {
+        personPanel.activate(true);
+        teamPanel.activate(false);
+    }
+
+    private void showTeamsTab() {
+        personPanel.activate(false);
+        teamPanel.activate(true);
     }
 
     // generate/load buttons active by default,
@@ -65,7 +80,8 @@ public class Main : MonoBehaviour {
 
         System.Diagnostics.Stopwatch sw = System.Diagnostics.Stopwatch.StartNew();
 
-        persons = gen.run(PERSONS_AMOUNT);
+        persons = personGenerator.run(PERSONS_AMOUNT);
+        showPersonsTab();
         personPanel.drawPersons(persons);
 
         Debug.Log("Persons generation time : " + sw.ElapsedMilliseconds + " ms");
@@ -85,7 +101,6 @@ public class Main : MonoBehaviour {
             res += persons[i].convertToJson();
 
             if (i != persons.Length - 1) {
-                Debug.Log("i : " + i);
                 res += ", ";
             }
         }
@@ -127,14 +142,26 @@ public class Main : MonoBehaviour {
         setInteractable(true);
     }
 
-    public void generateTeams() {
+    private void generateTeams(bool generateOthers) {
         setInteractable(false);
 
         System.Diagnostics.Stopwatch sw = System.Diagnostics.Stopwatch.StartNew();
+
+        teams = teamGenerator.run(persons, TEAMS_AMOUNT, generateOthers);
+        showTeamsTab();
+        teamPanel.drawTeams(teams);
 
         Debug.Log("Teams generation time : " + sw.ElapsedMilliseconds + " ms");
         sw.Stop();
 
         setInteractable(true);
+    }
+
+    public void emptyTeamGeneration() {
+        generateTeams(false);
+    }
+
+    public void defaultTeamGeneration() {
+        generateTeams(true);
     }
 }

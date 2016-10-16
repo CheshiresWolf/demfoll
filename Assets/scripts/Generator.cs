@@ -1,4 +1,5 @@
-﻿using Utils;
+﻿using System.Collections.Generic;
+using Utils;
 
 namespace Generator {
     public class Collection {
@@ -180,8 +181,86 @@ namespace Generator {
     }
 
     public class TeamGenerator {
-        public Team[] run(int number) {
+
+        const int MIN_TEAM_MEMBERS = 5;
+        const int PROFFESIONAL_TEAM_MEMBERS = 3;
+
+        RandomUtils utils = new RandomUtils();
+
+        // Банда [Кримінал]: Аферист, Злочинець, Робочий, Моряк
+        // Загін [Бойовики]: Солдат, Моряк, Робочий
+        // Група [Агентів]: Аферист, Свідок Тінь, Богема
+        // Товариство [Цивільне]: Колоніст, Міщанин, Аристократ
+        // Коло [Містичне]: Свідок Окульт, Студент, Богема
+        private string getType() {
+            return utils.getRandomFromArray(new string[5] { "Банда", "Загін", "Група", "Товариство", "Коло" });
+        }
+
+        private string getBaseBiography(string type) {
+            string biography = "";
+
+            switch (type) {
+                case "Банда" :
+                    biography = utils.getRandomFromArray(new string[4] { "Аферист", "Злочинець", "Робочий", "Моряк" });
+                    break;
+                case "Загін" :
+                    biography = utils.getRandomFromArray(new string[3] { "Солдат", "Моряк", "Робочий" });
+                    break;
+                case "Група" :
+                    biography = utils.getRandomFromArray(new string[3] { "Аферист", "Свідок Тінь", "Богема" });
+                    break;
+                case "Товариство" :
+                    biography = utils.getRandomFromArray(new string[3] { "Колоніст", "Міщанин", "Аристократ" });
+                    break;
+                case "Коло" :
+                    biography = utils.getRandomFromArray(new string[3] { "Свідок Окульт", "Студент", "Богема" });
+                    break;
+            }
+
+            return biography;
+        }
+
+        private Team generateTeam(List<Person> personsList, bool generateOthers) {
+            Team newTeam = new Team();
+
+            newTeam.type = getType();
+            newTeam.baseBiography = getBaseBiography(newTeam.type);
+
+            // Поиск троих с person.biography == team.biography
+            int count = personsList.Count;
+            for (int j = 0; j < count; j++) {
+                if (personsList[j].isBiographyExists(newTeam.baseBiography) && (newTeam.persons.Count < PROFFESIONAL_TEAM_MEMBERS)) {
+                    newTeam.addPerson(personsList[j]);
+                }
+            }
+
+            // can be really slow
+            foreach (Person item in newTeam.persons) {
+                personsList.Remove(item);
+            }
+
+            // случайный поиск оставшихся
+            if (generateOthers) {
+                int leftCount = MIN_TEAM_MEMBERS - newTeam.persons.Count;
+                for (int j = 0; j < leftCount; j++) {
+                    Person randomPerson = utils.getRandomFromList<Person>(personsList);
+
+                    newTeam.addPerson(randomPerson);
+                    personsList.Remove(randomPerson);
+                }
+            }
+
+            return newTeam;
+        }
+
+        public Team[] run(Person[] persons, int number, bool generateOthers) {
             Team[] teams = new Team[number];
+
+            List<Person> personsLeft = new List<Person>(persons);
+            for (int i = 0; i < number; i++) {
+                teams[i] = generateTeam(personsLeft, generateOthers);
+                teams[i].id = i;
+            }
 
             return teams;
         }

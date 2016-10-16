@@ -85,6 +85,14 @@ namespace Generator {
         public Stats stats = new Stats();
         public Inventory inventory = new Inventory();
 
+        // =======<Checks>=======
+
+        public bool isBiographyExists(string biographyName) {
+            return this.biography.Contains(biographyName);
+        }
+
+        // =======<Converters>=======
+
         public string convertToJson() {
             return JsonUtility.ToJson(new SerializablePerson(this));
         }

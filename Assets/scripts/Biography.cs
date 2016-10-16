@@ -97,6 +97,7 @@ public class NobleBiography : AbstractBiography {
 
 public class BohemiaBiography : AbstractBiography {
     public override void apply(Person person) {
+        //UnityEngine.Debug.Log(person.id + " : BohemiaBiography");
         person.stats.INT += 5;
         person.stats.CHAR += 5;
     }
@@ -104,6 +105,7 @@ public class BohemiaBiography : AbstractBiography {
 
 public class DoctorBiography : AbstractBiography {
     public override void apply(Person person) {
+        //UnityEngine.Debug.Log(person.id + " : DoctorBiography");
         person.stats.INT += 5;
 
         person.perks.Add("Лікарь (1)");

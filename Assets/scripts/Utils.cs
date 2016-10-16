@@ -1,4 +1,5 @@
 ﻿using Generator;
+using System.Collections.Generic;
 
 namespace Utils {
     public class RandomUtils {
@@ -18,12 +19,10 @@ namespace Utils {
                 probSum += probabilities[i];
             }
 
-            double normalizationFactor = probSum / 100;
-
-            double probabilityValue = getRandomBetween(0, 100) * normalizationFactor;
+            float probabilityValue = getRandomBetween(1, probSum + 1);
 
             for (int i = probabilities.Length - 1; i >= 0; i--) {
-                if (probSum > probabilityValue && probabilityValue > (probSum - probabilities[i])) {
+                if ( (probSum >= probabilityValue) && (probabilityValue > (probSum - probabilities[i])) ) {
                     return names[i];
                 } else {
                     probSum -= probabilities[i];
@@ -39,6 +38,11 @@ namespace Utils {
 
         public int getRandomBetween(int min, int max) {
             return UnityEngine.Random.Range(min, max); // strange Unity method, need to check its normal distribution
+        }
+
+        // some sort of black magic
+        public T getRandomFromList<T>(List<T> list) {
+            return list[getRandomBetween(0, list.Count)];
         }
 
     }

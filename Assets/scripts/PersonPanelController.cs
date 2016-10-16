@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-
 using Generator;
 using UnityEngine.UI;
 using System.Collections.Generic;
@@ -8,12 +6,13 @@ using System.Collections.Generic;
 public class PersonPanelController : MonoBehaviour {
     const float ROW_HEIGHT = 60.0f;
 
-    float x_pos = 50;
-    float y_pos = 50;
+    float x_pos;
+    float y_pos;
 
     float width;
     float height;
 
+    GameObject topParent;
     GameObject prefab;
     Font ArialFont;
 
@@ -24,17 +23,25 @@ public class PersonPanelController : MonoBehaviour {
         prefab = GameObject.Find("PersonInfoPrefab");
         ArialFont = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
 
+        topParent = GameObject.Find("PersonsScroll");
+
         RectTransform rectTransform = (RectTransform) prefab.transform;
         width = rectTransform.rect.width;
 
         x_pos = this.gameObject.transform.position.x;
         y_pos = 0; // -ROW_HEIGHT / 2;
+
+        topParent.SetActive(false);
     }
 	
 	// Update is called once per frame
 	void Update () {
 	
 	}
+
+    public void activate(bool state) {
+        topParent.SetActive(state);
+    }
 
     public void drawPerson(Person person) {
         GameObject newPanel = Instantiate(prefab, new Vector2(x_pos, y_pos), this.transform.rotation) as GameObject;
@@ -62,7 +69,7 @@ public class PersonPanelController : MonoBehaviour {
 
         panels.Clear();
         x_pos = this.gameObject.transform.position.x + width / 2;
-        y_pos = -10 + this.gameObject.transform.position.y;
+        y_pos = this.gameObject.transform.position.y - ROW_HEIGHT / 2;
 
         foreach (Person item in persons) {
             drawPerson(item);
