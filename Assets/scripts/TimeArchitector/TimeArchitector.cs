@@ -3,20 +3,28 @@ using System.Collections;
 using System.Collections.Generic;
 
 using AbstractButterflyClass;
+using UnityEngine.UI;
 
 public class TimeArchitector : MonoBehaviour {
     private float ms_in_tick = 100.0f; // 10 tick in second
     private ButterflyEffectController butterfly;
 
-	// Use this for initialization
-	void Start () {
+    private int[] ticks_variants = new int[] { 50, 100, 300 };
+    private int ticks_index = 1; // default 100 - 10 ticks in second, 10 seconds in day
+
+    private bool isActive = true;
+
+    Text label;
+
+    void Start () {
+        label = GameObject.Find("Time_pause/Text").GetComponent<Text>();
+
         butterfly = new ButterflyEffectController();
 	}
 	
-	// Update is called once per frame
 	void Update () {
-        if (theTimeHasCome()) {
-            butterfly.step();
+        if (isActive && theTimeHasCome()) {
+            butterfly.step(ticks_variants[ticks_index]);
         }
 	}
 
@@ -26,6 +34,20 @@ public class TimeArchitector : MonoBehaviour {
 
     public void removeScript(ButterflyEffect script) {
         butterfly.remove(script);
+    }
+
+    public void speedUp() {
+        if (ticks_index < 2) ticks_index++;
+    }
+
+    public void slowDown() {
+        if (ticks_index > 0) ticks_index--;
+    }
+
+    public void pause() {
+        isActive = !isActive;
+
+        label.text = isActive ? "Pause" : "Start";
     }
 
     private float lastTickMeasure = 0.0f;
@@ -45,9 +67,9 @@ public class TimeArchitector : MonoBehaviour {
 class ButterflyEffectController {
     private List<ButterflyEffect> queue = new List<ButterflyEffect>();
 
-    public void step() {
+    public void step(int ticks_in_day) {
         foreach (ButterflyEffect script in queue) {
-            script.step();
+            script.step(ticks_in_day);
         }
     }
 
