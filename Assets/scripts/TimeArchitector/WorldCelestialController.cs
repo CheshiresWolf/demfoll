@@ -64,4 +64,8 @@ public class WorldCelestialController : ButterflyEffect {
 
         if (DEBUG) Debug.Log("WorldCelestialController | step | rotationLeft : " + rotationLeft);
     }
+
+    public override void day_step(int ticks_in_day) {}
+
+    public override void month_step(int ticks_in_day) {}
 }

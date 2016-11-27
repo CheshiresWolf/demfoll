@@ -85,6 +85,8 @@ namespace Generator {
         public Stats stats = new Stats();
         public Inventory inventory = new Inventory();
 
+        public int teamId;
+
         // =======<Checks>=======
 
         public bool isBiographyExists(string biographyName) {
@@ -126,6 +128,8 @@ namespace Generator {
 
             this.inventory = new Inventory();
             this.inventory.readFromList(sp.inventory);
+
+            this.teamId = sp.teamId;
         }
 
         public string convertToPanel() {
@@ -180,6 +184,8 @@ namespace Generator {
         public List<int> stats;
         public List<string> inventory;
 
+        public int teamId;
+
         public SerializablePerson(Person person) {
             this.id = person.id;
             this.name = person.name;
@@ -204,6 +210,8 @@ namespace Generator {
 
             this.stats = person.stats.toList();
             this.inventory = person.inventory.toList();
+
+            this.teamId = person.teamId;
         }
     }
 }

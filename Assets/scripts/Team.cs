@@ -21,7 +21,12 @@ namespace Generator {
 
         public void addPerson(Person person) {
             // check person before add
+            person.teamId = id;
             persons.Add(person);
+        }
+
+        public void removePerson(Person person) {
+            persons.Remove(person);
         }
 
         // =======<Converters>=======

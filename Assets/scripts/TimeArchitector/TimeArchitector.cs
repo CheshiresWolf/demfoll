@@ -22,8 +22,8 @@ public class TimeArchitector : MonoBehaviour {
     PersonsGenerator personGenerator;
     TeamGenerator teamGenerator;
 
-    Person[] persons;
-    Team[] teams;
+    public Person[] persons;
+    public Team[] teams;
 
     const int PERSONS_AMOUNT = 200;
     const int TEAMS_AMOUNT = 15;
@@ -42,6 +42,8 @@ public class TimeArchitector : MonoBehaviour {
         butterfly = new ButterflyEffectController();
 
         startGeneration();
+
+        addScript(new WorldEvents(this));
 
         log.addText("The Place Where Time Begins...");
         isActive = true;
@@ -98,23 +100,5 @@ public class TimeArchitector : MonoBehaviour {
         log.addText(TEAMS_AMOUNT + " teams was generated in " + sw.ElapsedMilliseconds + " ms");
 
         sw.Stop();
-    }
-}
-
-class ButterflyEffectController {
-    private List<ButterflyEffect> queue = new List<ButterflyEffect>();
-
-    public void step(int ticks_in_day) {
-        foreach (ButterflyEffect script in queue) {
-            script.step(ticks_in_day);
-        }
-    }
-
-    public void add(ButterflyEffect script) {
-        queue.Add(script);
-    }
-
-    public void remove(ButterflyEffect script) {
-        queue.Remove(script);
     }
 }
