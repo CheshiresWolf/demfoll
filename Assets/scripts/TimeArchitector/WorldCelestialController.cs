@@ -4,6 +4,9 @@ using System.Collections;
 using AbstractButterflyClass;
 using System;
 
+using System.Collections;
+using System.Collections.Generic;
+
 public class WorldCelestialController : ButterflyEffect {
     const bool DEBUG = false;
 
@@ -14,11 +17,6 @@ public class WorldCelestialController : ButterflyEffect {
 
     Vector2 pivot;
     Vector3 direction;
-
-    float MIN_ANGLE_STEP = 0.72f;
-    float MAX_ANGLE_STEP = 3.6f;
-
-    float rotationLeft = 0.0f;
     
     void Start () {
         sun = GameObject.Find("Sun");
@@ -34,9 +32,23 @@ public class WorldCelestialController : ButterflyEffect {
         GameObject.Find("TimeArchitector").GetComponent<TimeArchitector>().addScript(this);
     }
 
+    /**
+     * Angle Step Conseption
+     * Pros : simple, easy to controll floating ticks_in_day
+     * Cons : twitching animation, float roundings
+     */
+
+    float MAX_ANGLE_STEP = 3.6f;
+
+    float rotationLeft = 0.0f;
+
     void Update() {
         if (rotationLeft > 0.0f) {
+            float msPassed = Time.deltaTime * 1000;
+            float MIN_ANGLE_STEP = MAX_ANGLE_STEP * msPassed / 100; // step must invoke in ~100ms
+
             if (DEBUG) Debug.Log("WorldCelestialController | Update | rotationLeft : " + rotationLeft);
+            if (DEBUG) Debug.Log("WorldCelestialController | Update | MIN_ANGLE_STEP : " + MIN_ANGLE_STEP);
 
             sun.transform.RotateAround(pivot, direction, MIN_ANGLE_STEP);
             moon.transform.RotateAround(pivot, direction, MIN_ANGLE_STEP);
@@ -47,8 +59,7 @@ public class WorldCelestialController : ButterflyEffect {
 
     public override void step(int ticks_in_day) {
         MAX_ANGLE_STEP = 360.0f / ticks_in_day;
-        MIN_ANGLE_STEP = MAX_ANGLE_STEP / 5; // this 5 is wrong and need to be floating based on Time.deltaTime
-
+        
         rotationLeft += MAX_ANGLE_STEP;
 
         if (DEBUG) Debug.Log("WorldCelestialController | step | rotationLeft : " + rotationLeft);

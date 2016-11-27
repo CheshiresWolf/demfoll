@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using AbstractButterflyClass;
 using UnityEngine.UI;
 
+using Generator;
+using Utils;
+
 public class TimeArchitector : MonoBehaviour {
     private float ms_in_tick = 100.0f; // 10 tick in second
     private ButterflyEffectController butterfly;
@@ -12,14 +15,36 @@ public class TimeArchitector : MonoBehaviour {
     private int[] ticks_variants = new int[] { 50, 100, 300 };
     private int ticks_index = 1; // default 100 - 10 ticks in second, 10 seconds in day
 
-    private bool isActive = true;
+    private bool isActive = false;
 
     Text label;
 
+    PersonsGenerator personGenerator;
+    TeamGenerator teamGenerator;
+
+    Person[] persons;
+    Team[] teams;
+
+    const int PERSONS_AMOUNT = 200;
+    const int TEAMS_AMOUNT = 15;
+
+    LogMachine log;
+
     void Start () {
+        log = GameObject.Find("LogText").GetComponent<LogMachine>();
+        log.addText("Demfoll is awake. Starting generation.");
+
+        personGenerator = new PersonsGenerator();
+        teamGenerator = new TeamGenerator();
+
         label = GameObject.Find("Time_pause/Text").GetComponent<Text>();
 
         butterfly = new ButterflyEffectController();
+
+        startGeneration();
+
+        log.addText("The Place Where Time Begins...");
+        isActive = true;
 	}
 	
 	void Update () {
@@ -62,6 +87,18 @@ public class TimeArchitector : MonoBehaviour {
 
         return false;
     }
+
+    public void startGeneration() {
+        System.Diagnostics.Stopwatch sw = System.Diagnostics.Stopwatch.StartNew();
+
+        persons = personGenerator.run(PERSONS_AMOUNT);
+        log.addText(PERSONS_AMOUNT + " sitizens was generated in " + sw.ElapsedMilliseconds + " ms");
+
+        teams = teamGenerator.run(persons, TEAMS_AMOUNT, true);
+        log.addText(TEAMS_AMOUNT + " teams was generated in " + sw.ElapsedMilliseconds + " ms");
+
+        sw.Stop();
+    }
 }
 
 class ButterflyEffectController {
@@ -78,6 +115,6 @@ class ButterflyEffectController {
     }
 
     public void remove(ButterflyEffect script) {
-        
+        queue.Remove(script);
     }
 }

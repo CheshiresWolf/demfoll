@@ -4,6 +4,8 @@ using System.Collections;
 using AbstractButterflyClass;
 using UnityEngine.UI;
 
+using Utils;
+
 public class TimeFlowController : ButterflyEffect {
     const bool DEBUG = false;
 
@@ -14,10 +16,28 @@ public class TimeFlowController : ButterflyEffect {
 
     string speedMultiplier = "1x";
 
+    LogMachine log;
+    RandomUtils utils;
+
+    string[] timePhrases = new string[7] {
+        " aaaaand nothing hapens.",
+        " sity is boring as always.",
+        " mighty circus, with clowns, trained animals and bearded women visit some other town.",
+        " does elephant suspects that we looking on him?",
+        " i think i see bird flying arowd elephant neck! And it's gone.",
+        " 8-800...",
+        " it's not oblivious, but it looks like sun is in deeeep depression and slowly dying inside... hey bird is back!"
+    };
+    int[] timePhrasesProbs = new int[7] {58, 15, 7, 7, 7, 3, 3};
+
 	void Start () {
+        utils = new RandomUtils();
+
         label = GameObject.Find("Time_text").GetComponent<Text>();
 
         GameObject.Find("TimeArchitector").GetComponent<TimeArchitector>().addScript(this);
+
+        log = GameObject.Find("LogText").GetComponent<LogMachine>();
     }
 	
 	void Update () {
@@ -56,6 +76,8 @@ public class TimeFlowController : ButterflyEffect {
         } else {
             stepsCount = 0;
             currentDay += 1;
+
+            log.addText("Day " + currentDay + "" + utils.getRandomFromArrays(timePhrases,timePhrasesProbs));
 
             updateText();
         }
