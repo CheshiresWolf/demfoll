@@ -60,13 +60,49 @@ public class DoctorPerk : AbstractPerk {
     }
 }
 
+public class EmpathyPerk : AbstractPerk {
+    public override void apply(Person person) {
+        // O_o
+    }
+}
+
+public class DiplomatPerk : AbstractPerk {
+    public override void apply(Person person) {
+        // O_o
+    }
+}
+
+public class PlayerGeniusPerk : AbstractPerk {
+    public override void apply(Person person) {
+        // O_o
+    }
+}
+
+public class ImmunityPerk : AbstractPerk {
+    public override void apply(Person person) {
+        // O_o
+    }
+}
+
+public class PlayerDoctorPerk : AbstractPerk {
+    public override void apply(Person person) {
+        // O_o
+    }
+}
+
 public class Perks {
     Dictionary<string, AbstractPerk> perks = new Dictionary<string, AbstractPerk> {
-        { "Геній",    new GeniusPerk() },
-        { "Невдаха",  new LooserPerk() },
-        { "Юність",   new YoungPerk()  },
-        { "Старість", new OldPerk()    },
-        { "Лікарь",   new DoctorPerk() },
+        { "Геній",      new GeniusPerk()      },
+        { "Невдаха",    new LooserPerk()      },
+        { "Юність",     new YoungPerk()       },
+        { "Старість",   new OldPerk()         },
+        { "Лікарь",     new DoctorPerk()      },
+        { "Емпат",      new EmpathyPerk()             },
+        { "Дипломат",   new DiplomatPerk()            },
+        { "Геніальний", new PlayerGeniusPerk()        },
+        { "Імунітет",   new ImmunityPerk()            },
+        { "Доктор",     new PlayerDoctorPerk()        }        
+
     };
 
     public void apply(Person person, string perkName) {

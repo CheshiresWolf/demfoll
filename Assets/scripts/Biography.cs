@@ -119,6 +119,45 @@ public class CourtesanBiography : AbstractBiography {
     }
 }
 
+public class SecretCourier : AbstractBiography {
+    public override void apply(Person person) {
+        person.stats.ATHL += 50;
+        person.stats.CONSP += 50;
+    }
+}
+
+public class BoulevardJournalist : AbstractBiography {
+    public override void apply(Person person) {
+        person.stats.INVST += 50;
+        person.stats.CHAR += 50;
+    }
+}
+
+public class ColonialAgent : AbstractBiography {
+    public override void apply(Person person) {
+        person.stats.CMRC += 80;
+    }
+}
+
+public class EternalStudent : AbstractBiography {
+    public override void apply(Person person) {
+        person.stats.INT += 80;
+    }
+}
+
+public class RogueGentleman : AbstractBiography {
+    public override void apply(Person person) {
+        person.stats.RNGC += 50;
+        person.stats.STLTH += 50;
+    }
+}
+
+public class SalonOccultost : AbstractBiography {
+    public override void apply(Person person) {
+        person.stats.MYST += 50;
+    }
+}
+
 public class Biography {
     Dictionary<string, AbstractBiography> biographies = new Dictionary<string, AbstractBiography> {
         { "Солдат",        new SoldierBiography()       },
@@ -137,7 +176,13 @@ public class Biography {
         { "Лікар",         new DoctorBiography()        },
         { "Куртизанка",    new CourtesanBiography()     },
         { "Міщанка",       new CitizenBiography()       },
-        { "Робоча",        new WorkerBiography()        }
+        { "Робоча",        new WorkerBiography()        },
+        { "Секретний кур'єр",       new SecretCourier()       },
+        { "Бульварний журналіст",   new BoulevardJournalist() },
+        { "Колоніальний агент",     new ColonialAgent()       },
+        { "Вічний студент",         new EternalStudent()      },
+        { "Джентльмен-Грабіжник",   new RogueGentleman()      },
+        { "Салонний окультист",     new SalonOccultost()      }                   
     };
 
     public void apply(Person person, string biographyName) {
@@ -145,3 +190,4 @@ public class Biography {
         person.biography.Add(biographyName);
     }
 }
+

@@ -18,6 +18,21 @@ namespace Generator {
         public int CRFT = 10; // Ремесло;
         public int WLP = 10; // Сила Волі;
 
+        public Stats(int defaultVal) {
+            this.MLC = defaultVal;
+            this.RNGC = defaultVal;
+            this.HLTH = defaultVal;
+            this.ATHL = defaultVal;
+            this.CONSP = defaultVal;
+            this.STLTH = defaultVal;
+            this.INVST = defaultVal;
+            this.CMRC = defaultVal;
+            this.INT = defaultVal;
+            this.MYST = defaultVal;
+            this.CHAR = defaultVal;
+            this.CRFT = defaultVal;
+            this.WLP = defaultVal;
+        }
         public string convertToJson() {
             return "[" + MLC + ", " + RNGC + ", " + HLTH + ", " + ATHL + ", " + CONSP + ", " + STLTH + ", " + INVST + ", " + CMRC + ", " + INT + ", " + MYST + ", " + CHAR + ", " + CRFT + ", " + WLP + "]";
         }
@@ -82,7 +97,7 @@ namespace Generator {
         public List<string> biography = new List<string>();
         public List<string> perks = new List<string>();
 
-        public Stats stats = new Stats();
+        public Stats stats = new Stats(10);
         public Inventory inventory = new Inventory();
 
         // =======<Checks>=======
@@ -121,7 +136,7 @@ namespace Generator {
             this.biography = sp.biography;
             this.perks = sp.perks;
 
-            this.stats = new Stats();
+            this.stats = new Stats(10);
             this.stats.readFromList(sp.stats);
 
             this.inventory = new Inventory();
