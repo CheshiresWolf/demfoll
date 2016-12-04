@@ -26,13 +26,15 @@ abstract class AbstractEvent {
 class MortisEvent : AbstractEvent {
 	private RandomUtils utils;
 	private LogMachine log;
+	private ItemLogMachine itemLog;
 
-	public MortisEvent(RandomUtils utils, LogMachine log) {
+	public MortisEvent(RandomUtils utils, LogMachine log, ItemLogMachine itemLog) {
 		this.offset = 1;
 		this.activationType = 0;
 
 		this.utils = utils;
 		this.log = log;
+		this.itemLog = itemLog;
 	}
 
     public override void run(Person[] newPersons, Team[] newTeams) {
@@ -62,14 +64,16 @@ class MortisEvent : AbstractEvent {
     	Debug.Log("WorldEvents | MortisEvent | run");
 
     	log.addText("Щасти і На Все Добре!\nПерсоною, на ім'я " + doomed.name + " " + doomed.surname + ", було знайдено щастя у життя. " + doomed.name + " " + doomed.surname + " більше не займається сумнівними справами.");
+    	itemLog.addPerson(doomed);
     }
 }
 
 class VitaemEvent : AbstractEvent {
 	private RandomUtils utils;
 	private LogMachine log;
+	private ItemLogMachine itemLog;
 
-	public VitaemEvent(RandomUtils utils, LogMachine log) {
+	public VitaemEvent(RandomUtils utils, LogMachine log, ItemLogMachine itemLog) {
 		this.offset = 20;
 		this.activationType = 0;
 
@@ -90,6 +94,7 @@ public class WorldEvents : ButterflyEffect {
 	private TimeArchitector timeArchitector;
 
     private LogMachine log = GameObject.Find("LogText").GetComponent<LogMachine>();
+    private ItemLogMachine itemLog = GameObject.Find("ItemLogPanel").GetComponent<ItemLogMachine>();
     private RandomUtils utils = new RandomUtils();
 
     public WorldEvents(TimeArchitector ta) {
@@ -97,8 +102,8 @@ public class WorldEvents : ButterflyEffect {
 
     	this.stepEvents = new List<AbstractEvent> ();
 		this.dayEvents = new List<AbstractEvent> {
-			new MortisEvent(utils, log),
-			new VitaemEvent(utils, log)
+			new MortisEvent(utils, log, itemLog),
+			new VitaemEvent(utils, log, itemLog)
 		};
 		this.monthEvents = new List<AbstractEvent> ();
     }
