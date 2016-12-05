@@ -17,7 +17,7 @@ public class TimeArchitector : MonoBehaviour {
 
     private bool isActive = false;
 
-    Text label;
+    //Text label;
 
     PersonsGenerator personGenerator;
     TeamGenerator teamGenerator;
@@ -37,7 +37,7 @@ public class TimeArchitector : MonoBehaviour {
         personGenerator = new PersonsGenerator();
         teamGenerator = new TeamGenerator();
 
-        label = GameObject.Find("Time_pause/Text").GetComponent<Text>();
+        //label = GameObject.Find("Time_pause/Text").GetComponent<Text>();
 
         butterfly = new ButterflyEffectController();
 
@@ -74,7 +74,7 @@ public class TimeArchitector : MonoBehaviour {
     public void pause() {
         isActive = !isActive;
 
-        label.text = isActive ? "Pause" : "Start";
+        //label.text = isActive ? "Pause" : "Start";
     }
 
     private float lastTickMeasure = 0.0f;
