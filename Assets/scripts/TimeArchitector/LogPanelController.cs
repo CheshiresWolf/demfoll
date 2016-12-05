@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class LogPanelController : MonoBehaviour {
@@ -35,7 +36,7 @@ public class LogPanelController : MonoBehaviour {
 
 	public void toggleLeftPanel() {
 		leftPanelState = !leftPanelState;
-		leftPanel.GetComponent<CanvasRenderer>().CrossFadeAlpha(
+		leftPanel.GetComponent<Image>().CrossFadeAlpha(
 			leftPanelState ? 1.0f : 0.0f,
 			1.0f,
 			false
@@ -60,7 +61,7 @@ public class LogPanelController : MonoBehaviour {
 
 	public void toggleRightPanel() {
 		rightPanelState = !rightPanelState;
-		rightPanel.GetComponent<CanvasRenderer>().CrossFadeAlpha(
+		rightPanel.GetComponent<Image>().CrossFadeAlpha(
 			rightPanelState ? 1.0f : 0.0f,
 			1.0f,
 			false
