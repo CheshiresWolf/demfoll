@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using Utils;
@@ -45,7 +45,12 @@ public class ProfilePanelController : MonoBehaviour {
 	}
 
 	public void deleteProfile() {
+		string currentPlayer = PlayerPrefs.GetString("Player");
+		if (currentPlayer.Length > 0 && profile.name.Length > 0 && profile.name == currentPlayer) {
+			PlayerPrefs.SetString("Player", null);
+		}
 		profile = null;
+		msg = null;
 		nameText.text = "Profile name";
 		avatar.sprite = Resources.Load<Sprite>(CreationMain.DEFAULT_TEXTURE);
 	}

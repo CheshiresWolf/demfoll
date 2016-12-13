@@ -9,12 +9,11 @@ public class Menu : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        Debug.Log("Scene started");
         string currentPlayer = PlayerPrefs.GetString("Player");
         continueBtn = GameObject.Find("ContinueBtn").GetComponent<Button>();
         continueBtn.gameObject.SetActive(false);
+        PlayerPrefs.SetString("Player", null);
         if (currentPlayer.Length > 0) {
-            Debug.Log("SetActive");
             continueBtn.gameObject.SetActive(true);
         }
 	}
@@ -26,10 +25,6 @@ public class Menu : MonoBehaviour {
 
     public void startCampaign() {
         PlayerPrefs.SetString("Player", "SomeName");
-    }
-
-    public void deleteCampaign() {
-        PlayerPrefs.SetString("Player", null);
     }
 
     public void exit() {

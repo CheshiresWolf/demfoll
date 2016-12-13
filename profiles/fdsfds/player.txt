@@ -1,0 +1,1 @@
+{"id":0,"name":"fdsfds","surname":"","money":0,"currentState":"","location":"","health":12,"focus":0,"origin":["Далекі Колонії","Шляхетний дім"],"biography":[],"mentor":["Політик Кукловод"],"perks":[],"manners":["Гумор","Відкритість"],"stats":[120,120,170,120,120,120,170,120,120,120,120,170,120],"inventory":[],"property":[]}

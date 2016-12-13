@@ -8,7 +8,14 @@ namespace Utils {
 
         public string readFile(string fileName) {
             Debug.Log(fileName);
-            return File.ReadAllText(fileName);
+            string res;
+            try {
+                res = File.ReadAllText(fileName);
+            } catch (Exception e) {
+                Debug.Log("Read exception: " + e);
+                res = "";
+            }
+            return res;
         }
 
         public void writeFile(string filename, string data) {
