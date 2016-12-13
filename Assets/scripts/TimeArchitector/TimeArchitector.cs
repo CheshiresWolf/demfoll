@@ -115,10 +115,10 @@ public class TimeArchitector : MonoBehaviour {
             player.readFromJson(res);
 
             loadPersons();
-            log.addText("Persons were loaded from player " + playerName + " data in " + sw.ElapsedMilliseconds + " ms");
+            if (persons.Length > 0) log.addText("Persons were loaded from player " + playerName + " data in " + sw.ElapsedMilliseconds + " ms");
 
             loadTeams();
-            log.addText("Teams were loaded from player " + playerName + " data in " + sw.ElapsedMilliseconds + " ms");
+            if (teams.Length > 0) log.addText("Teams were loaded from player " + playerName + " data in " + sw.ElapsedMilliseconds + " ms");
         }
 
         sw.Stop();
