@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 using AbstractButterflyClass;
@@ -48,12 +48,6 @@ public class TimeFlowController : ButterflyEffect {
 
     public override void step(int ticks_in_day) {
         if (local_ticks_in_day != ticks_in_day) {
-            if (DEBUG) Debug.Log("TimeFlowController | step | stepsCount : " + stepsCount);
-            float flowMultiplier = (float) ticks_in_day / local_ticks_in_day;
-            if (DEBUG) Debug.Log("TimeFlowController | step | flowMultiplier : " + flowMultiplier);
-            stepsCount = (int) (stepsCount * flowMultiplier); // loosing steps at this moment, need to be checked (e.g. 91 * 0.33 = 30.03 to int 30)
-            if (DEBUG) Debug.Log("TimeFlowController | step | stepsCount : " + stepsCount);
-
             switch (ticks_in_day) {
                 case 50 :
                     speedMultiplier = "3x";
@@ -66,22 +60,19 @@ public class TimeFlowController : ButterflyEffect {
                     break;
             }
 
-            local_ticks_in_day = ticks_in_day;
-
-            updateText();
-        }
-
-        if (stepsCount < local_ticks_in_day) {
-            stepsCount += 1;
-        } else {
-            stepsCount = 0;
-            currentDay += 1;
-
-            log.addText("Day " + currentDay + "" + utils.getRandomFromArrays(timePhrases,timePhrasesProbs));
-
             updateText();
         }
     }
+
+    public override void day_step(int ticks_in_day) {
+        currentDay += 1;
+
+        log.addText("Day " + currentDay + "" + utils.getRandomFromArrays(timePhrases,timePhrasesProbs));
+
+        updateText();
+    }
+
+    public override void month_step(int ticks_in_day) {}
 
     private void updateText() {
         label.text = "Day : " + currentDay + ", Speed : " + speedMultiplier + ".";
